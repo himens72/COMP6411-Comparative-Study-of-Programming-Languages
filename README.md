@@ -1,1 +1,1 @@
-# COMP6411-Comparative-Study-of-Programming-Languages
+# COMP6411 : Comparative Study of Programming Languages
