@@ -1,5 +1,5 @@
 import random
-
+import json
 
 class GUESS:
 
@@ -13,7 +13,7 @@ class GUESS:
         print(self.string_database.words)
 
     def select_option(self, word_guess, missed_guess, missed_letter):
-        print("Inital Guess : ", word_guess)
+        print("Initial Guess : ", word_guess)
         print("g = guess, t = tell me, l for a letter, and q to quit")
         option = input()
         if "g" == option:
@@ -24,10 +24,16 @@ class GUESS:
             self.string_database.letter_option(word_guess, missed_guess, missed_letter)
         elif "q" == option:
             print("Quit Option selected")
+            self.display_ouput()
         else:
             print("Please Select Proper Option")
             self.select_option(word_guess, missed_guess, missed_letter)
 
+    def display_ouput(self):
+        template = "{0:7}{1:15}{2:15}{3:15}{4:15}{5:10}"  # column widths: 8, 10, 15, 7, 10
+        print("Game\tWord\tStatus\tBad Guesses\tMissed Letter\tScore")
+        for i in range(len(self.game_information.data)):
+                print('{:<8d}{:>4s}{:^14s}{:<8d}{:>8d}{:>14.2f}'.format(self.game_information.data[i][0], self.game_information.data[i][1], self.game_information.data[i][2], self.game_information.data[i][3], self.game_information.data[i][4], self.game_information.data[i][5]))
 
 class stringDatabase:
     words = []
@@ -36,6 +42,7 @@ class stringDatabase:
     score = 0
     user_guess = ["_", "_", "_", "_"]
     guess_class = ""
+    game_class = ""
 
     def read_word_file(self):
         print("Inside Read File Function")
@@ -61,6 +68,7 @@ class stringDatabase:
             current_index = 0
         if current_index == 0:
             print("Congratulation!! You have Correct Guess ", word_guess)
+            self.game_class.add_data(word_guess, "Success",missed_guess, missed_letter)
             self.guess_class.select_option(self.words[random.randint(0, len(self.words))], 0, 0)
         else:
             print("Incorrect Guess")
@@ -69,6 +77,7 @@ class stringDatabase:
 
     def tell_me_option(self, word_guess, missed_guess, missed_letter):
         print("Current Guess :", word_guess)
+        self.game_class.add_data(word_guess, "Gave Up", missed_guess, missed_letter)
         self.guess_class.select_option(self.words[random.randint(0, len(self.words))], 0, 0)
 
     def letter_option(self, word_guess, missed_guess, missed_letter):
@@ -93,6 +102,7 @@ class stringDatabase:
 
             if output == word_guess:
                 print("Congratulation!! You have Correct Guess ", word_guess)
+                self.game_class.add_data(word_guess, "Success", missed_guess, missed_letter)
                 self.guess_class.select_option(self.words[random.randint(0, len(self.words))], 0, 0)
             else:
                 output = "Current Guess : "
@@ -111,14 +121,25 @@ class stringDatabase:
 
 
 class GAME:
-    print()
+    data = []
 
+    def add_data(self, word_guess,message, missed_guess, missed_letter):
+        entries = []
+        entries.append(len(self.data) + 1)
+        entries.append(word_guess)
+        entries.append(message)
+        entries.append(missed_guess)
+        entries.append(missed_letter)
+        entries.append(missed_letter)
+        self.data.append(entries)
 
 def main():
     game = GAME()
     database = stringDatabase()
     guess = GUESS(game, database)
+    guess.display_ouput()
     stringDatabase.guess_class = guess
+    stringDatabase.game_class = game
     guess.start_game()
     guess.select_option(stringDatabase.words[random.randint(0, len(stringDatabase.words))], 0, 0)
 
