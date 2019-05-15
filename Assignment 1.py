@@ -10,6 +10,7 @@ class GUESS:
     def start_game(self):
         print("** The great guessing game **")
         self.string_database.read_word_file()
+        self.string_database.calculate_frequency()
         print(self.string_database.words)
 
     def select_option(self, word_guess, missed_guess, missed_letter):
@@ -43,16 +44,34 @@ class stringDatabase:
     user_guess = ["_", "_", "_", "_"]
     guess_class = ""
     game_class = ""
+    characters = []
+    character_values = []
+    main_line = ""
+
+    def calculate_frequency(self):
+        i = 0
+        while i < 26:
+            self.characters.append(chr(97 + i))
+            self.character_values.append(self.main_line.count(self.characters[i]))
+            i += 1
 
     def read_word_file(self):
+        initial = 97
+        i = 0
+        while i < 26:
+            self.characters.append(chr(97 + i))
+            print(self.characters[i])
+            i += 1
         print("Inside Read File Function")
         input_files = open("four_letters.txt", "r+")
         print("Name of the file : ", input_files.name)
         for line in input_files:
+            self.main_line += line
             line = line.strip()
             line = line.split(" ")
             for x in line:
                 self.words.append(x)
+        self.main_line = self.main_line.replace(" ", "")
 
     def guess_option(self, word_guess, missed_guess, missed_letter):
         print(missed_guess, ", ", missed_letter)
@@ -69,6 +88,10 @@ class stringDatabase:
         if current_index == 0:
             print("Congratulation!! You have Correct Guess ", word_guess)
             self.game_class.add_data(word_guess, "Success",missed_guess, missed_letter)
+            self.letter_used = []
+            self.guess_used = []
+            self.score = 0
+            self.user_guess = ["_", "_", "_", "_"]
             self.guess_class.select_option(self.words[random.randint(0, len(self.words))], 0, 0)
         else:
             print("Incorrect Guess")
@@ -78,6 +101,10 @@ class stringDatabase:
     def tell_me_option(self, word_guess, missed_guess, missed_letter):
         print("Current Guess :", word_guess)
         self.game_class.add_data(word_guess, "Gave Up", missed_guess, missed_letter)
+        self.letter_used = []
+        self.guess_used = []
+        self.score = 0
+        self.user_guess = ["_", "_", "_", "_"]
         self.guess_class.select_option(self.words[random.randint(0, len(self.words))], 0, 0)
 
     def letter_option(self, word_guess, missed_guess, missed_letter):
@@ -103,6 +130,10 @@ class stringDatabase:
             if output == word_guess:
                 print("Congratulation!! You have Correct Guess ", word_guess)
                 self.game_class.add_data(word_guess, "Success", missed_guess, missed_letter)
+                self.letter_used = []
+                self.guess_used = []
+                self.score = 0
+                self.user_guess = ["_", "_", "_", "_"]
                 self.guess_class.select_option(self.words[random.randint(0, len(self.words))], 0, 0)
             else:
                 output = "Current Guess : "
@@ -137,7 +168,6 @@ def main():
     game = GAME()
     database = stringDatabase()
     guess = GUESS(game, database)
-    guess.display_ouput()
     stringDatabase.guess_class = guess
     stringDatabase.game_class = game
     guess.start_game()
