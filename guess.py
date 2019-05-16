@@ -21,13 +21,14 @@ class guess:
         elif "q" == option:
             print("Quit Option selected")
             self.display_ouput()
+            print()
+            exit(0)
         else:
             print("Please Select Proper Option")
             self.select_option(word_guess, missed_guess, missed_letter)
 
     def display_ouput(self):
         total = 0
-        template = "{0:7}{1:15}{2:15}{3:15}{4:15}{5:10}"  # column widths: 8, 10, 15, 7, 10
         print("Game\tWord\tStatus\tBad Guesses\tMissed Letter\tScore")
         for i in range(len(self.game_information.data)):
             print('{:<8d}{:>4s}{:^14s}{:<8d}{:>8d}{:>14.2f}'.format(self.game_information.data[i][0],
@@ -39,4 +40,4 @@ class guess:
             x = self.game_information.data[i][5]
             total = total + x
         print()
-        print("Final Score: " + str(float(total)))
+        print('Final Score: ' + str(float(total)))

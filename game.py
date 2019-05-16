@@ -36,7 +36,29 @@ class game:
                     while t <= missed_guess:
                         a = self.score * 0.1
                         temp_score1 = temp_score1 + a
+                        b = 1
+                        t = t + b
                     self.score = (temp_score / (missed_letter + 4 - count)) - temp_score1
+            else:
+                for i in range(0, len(word_guess)):
+                    x = self.frequency[ord(word_guess[i]) - 97]
+                    self.score = self.score + x
+                temp_score = 0
+                count = 0
+                for i in range(0, len(user_guess)):
+                    if user_guess[i] == "_":
+                        x = self.frequency[ord(word_guess[i]) - 97]
+                        y = 1
+                        count = count + y
+                        temp_score = temp_score + x
+                t = 1
+                temp_score1 = 0
+                while t <= missed_guess:
+                    a = self.score * 0.1
+                    temp_score1 = temp_score1 + a
+                    b = 1
+                    t = t + b
+                self.score = (temp_score / (missed_letter + 4 - count)) - temp_score1
         else:
             temp_score2 = 0
             for i in range(0, len(user_guess)):

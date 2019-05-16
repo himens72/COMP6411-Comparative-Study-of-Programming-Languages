@@ -15,9 +15,7 @@ class stringDatabase:
     main_line = ""
 
     def read_word_file(self):
-        print("Inside Read File Function")
         input_files = open("four_letters.txt", "r+")
-        print("Name of the file : ", input_files.name)
         for line in input_files:
             self.main_line += line
             line = line.strip()
